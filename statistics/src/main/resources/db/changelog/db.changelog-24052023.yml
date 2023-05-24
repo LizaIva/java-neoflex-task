@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_statistics
+      author: Elizaveta Ivanova
+      sql:
+        CREATE TABLE statistics(
+            id INT PRIMARY KEY,
+            app VARCHAR(100),
+            uri VARCHAR(100),
+            ip VARCHAR(100),
+            created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+
+  - changeSet:
+      id: add_default_statistics
+      author: Elizaveta Ivanova
+      sql:
+        INSERT INTO statistics VALUES(1, 'iphone', '123', '123');

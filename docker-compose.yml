@@ -1,0 +1,42 @@
+version: '3.1'
+services:
+  user-storage-db:
+    image: postgres:13.7-alpine
+    volumes:
+      - /var/lib/postgresql/data/
+    ports:
+      - "5442:5432"
+    environment:
+      - POSTGRES_DB=user_storage
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  user-storage-server:
+    build: user_storage
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-storage-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-storage-db:5432/user_storage
+      - STATS_SERVER_URL=http://stats-server:9090/hit
+
+  statistic-db:
+    image: postgres:13.7-alpine
+    volumes:
+      - /var/lib/postgresql/data/
+    ports:
+      - "5452:5432"
+    environment:
+      - POSTGRES_DB=statistic_storage
+      - POSTGRES_STATISTIC=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  stats-server:
+    build: statistics
+    ports:
+      - "9090:9090"
+    depends_on:
+      - statistic-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://statistic-db:5432/statistic_storage
