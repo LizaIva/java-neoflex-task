@@ -1,5 +1,16 @@
 version: '3.1'
 services:
+  jaeger-trace:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "9411:9411"
+
   user-storage-db:
     image: postgres:13.7-alpine
     volumes:
@@ -17,9 +28,11 @@ services:
       - "8080:8080"
     depends_on:
       - user-storage-db
+      - jaeger-trace
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://user-storage-db:5432/user_storage
       - STATS_SERVER_URL=http://stats-server:9090/hit
+      - JAEGER_TRACE_HOST=jaeger-trace
 
   statistic-db:
     image: postgres:13.7-alpine
@@ -38,5 +51,7 @@ services:
       - "9090:9090"
     depends_on:
       - statistic-db
+      - jaeger-trace
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://statistic-db:5432/statistic_storage
+      - JAEGER_TRACE_HOST=jaeger-trace
