@@ -1,0 +1,62 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+  endpoint:
+    shutdown:
+      enabled: true
+
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/statistic_storage}
+    username: postgres
+    password: postgres
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+    properties:
+      dialect: org.hibernate.dialect.PostgreSQL10Dialect
+      format_sql: true
+
+  application:
+    name: statistics
+
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-main.yml
+
+server:
+  port: 9090
+
+
+logging:
+  level:
+    org.springframework.web: TRACE
+
+
+opentracing:
+  jaeger:
+    udp-sender:
+      host: ${JAEGER_TRACE_HOST:localhost}
+      port: 6831
+    log-spans: true
+    service-name: statistics
+
+
+
