@@ -3,10 +3,10 @@ package ru.neoflex.user_storage.storage.user.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import ru.neoflex.user_storage.storage.user.UserStorage;
 import ru.neoflex.user_storage.exception.UnknownDataException;
 import ru.neoflex.user_storage.model.user.User;
 import ru.neoflex.user_storage.repository.user.UserRepository;
+import ru.neoflex.user_storage.storage.user.UserStorage;
 
 import java.util.List;
 

@@ -2,9 +2,9 @@ package ru.neoflex.user_storage.utils.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.neoflex.user_storage.model.user.User;
 import ru.neoflex.user_storage.dto.user.CreateUserDto;
 import ru.neoflex.user_storage.dto.user.UserDto;
+import ru.neoflex.user_storage.model.user.User;
 
 import java.util.ArrayList;
 import java.util.List;

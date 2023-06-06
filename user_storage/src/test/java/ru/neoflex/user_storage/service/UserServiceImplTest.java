@@ -1,4 +1,5 @@
 package ru.neoflex.user_storage.service;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,7 +13,6 @@ import ru.neoflex.user_storage.model.user.User;
 import ru.neoflex.user_storage.service.user.impl.UserServiceImpl;
 import ru.neoflex.user_storage.storage.user.UserStorage;
 import ru.neoflex.user_storage.utils.user.UserMapper;
-
 
 import javax.validation.ValidationException;
 import java.util.List;
