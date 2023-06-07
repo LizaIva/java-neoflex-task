@@ -1,6 +1,7 @@
 package ru.neoflex.user_storage.service.user;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.neoflex.user_storage.dto.user.CreateUserDto;
 import ru.neoflex.user_storage.dto.user.UserDto;
 
@@ -24,9 +25,13 @@ public interface UserService {
 
     String sayHello();
 
-    Flux<String> sayBye();
+    Mono<String> sayBye();
 
-    Flux<String> sayGoodByeWithDelay();
+    Mono<String> sayGoodByeWithDelay();
 
-    Flux<String> concatTwoMethod();
+    Mono<String> concatTwoMethod();
+
+    Flux<String> concatFiveMethod();
+
+    Flux<String> methodWithWEbClient();
 }

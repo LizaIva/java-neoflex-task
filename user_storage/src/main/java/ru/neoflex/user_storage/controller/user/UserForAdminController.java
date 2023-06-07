@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.neoflex.user_storage.client.StatsClient;
 import ru.neoflex.user_storage.dto.user.CreateUserDto;
 import ru.neoflex.user_storage.dto.user.UserDto;
@@ -56,35 +56,31 @@ public class UserForAdminController {
 
     @GetMapping("/bye")
     @ResponseStatus(HttpStatus.OK)
-    public Flux<String> sayBye() {
+    public Mono<String> sayBye() {
         return userService.sayBye();
     }
 
     @GetMapping("/bye/delay")
     @ResponseStatus(HttpStatus.OK)
-    public Flux<String> sayByeWithDelay() {
+    public Mono<String> sayByeWithDelay() {
         return userService.sayGoodByeWithDelay();
     }
 
     @GetMapping("/sayAll")
     @ResponseStatus(HttpStatus.OK)
-    public Flux<String> concatTwoMethod() {
+    public Mono<String> concatTwoMethod() {
         return userService.concatTwoMethod();
     }
 
-    @GetMapping("/sayAllDifferentWay")
+    @GetMapping("/concatFiveMethod")
     @ResponseStatus(HttpStatus.OK)
-    public Flux<String> mergeMethod() {
-        return userService.sayBye().mergeWith(sayByeWithDelay());
+    public Flux<String> concatFiveMethod() {
+        return userService.concatFiveMethod();
     }
 
-
+    @GetMapping("/methodWithWEbClient")
+    @ResponseStatus(HttpStatus.OK)
     public Flux<String> methodWithWEbClient() {
-        WebClient client = WebClient.create("http://localhost:5050");
-        Flux<String> fluxResult = client.get()
-                .uri("/bye")
-                .retrieve()
-                .bodyToFlux(String.class);
-        return fluxResult;
+        return userService.methodWithWEbClient();
     }
 }

@@ -3,7 +3,9 @@ package ru.neoflex.user_storage.service.user.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import ru.neoflex.user_storage.dto.user.CreateUserDto;
@@ -60,26 +62,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Flux<String> sayBye() {
-        return Flux.just(BYE);
+    public Mono<String> sayBye() {
+        return Mono.just(BYE);
     }
 
     @Override
-    public Flux<String> sayGoodByeWithDelay() {
-        return Flux.just(GOOD_BYE)
-                .delayElements(Duration.ofSeconds(5), scheduler);
+    public Mono<String> sayGoodByeWithDelay() {
+        return Mono.just(GOOD_BYE)
+                .delayElement(Duration.ofSeconds(5), scheduler);
     }
 
     @Override
-    public Flux<String> concatTwoMethod() {
-        return Flux.concat(sayBye(), sayGoodByeWithDelay());
+    public Mono<String> concatTwoMethod() {
+        return Mono.just(sayHello())
+                .flatMap(helloResult -> sayBye()
+                        .map(byeResult -> helloResult + byeResult)
+                );
     }
 
+    @Override
     public Flux<String> concatFiveMethod() {
-        return Flux.merge(sayGoodByeWithDelay(), sayGoodByeWithDelay(), sayGoodByeWithDelay(), sayGoodByeWithDelay(), sayGoodByeWithDelay())
+        return Flux.range(0, 5)
+                .flatMap(i -> sayGoodByeWithDelay())
                 .parallel()
                 .runOn(Schedulers.elastic())
                 .sequential();
     }
 
+    @Override
+    public Flux<String> methodWithWEbClient() {
+        WebClient client = WebClient.create("http://localhost:5050");
+        Flux<String> fluxResult = client.get()
+                .uri("/bye")
+                .retrieve()
+                .bodyToFlux(String.class);
+        return fluxResult;
+    }
 }
